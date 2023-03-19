@@ -1,64 +1,45 @@
-#artūrs jānis karss 211recro029 it 1. grupa
-from heapq import heapify
-
-
-def heapify(data, i, swaps):
-    n = len(data)
-    left_child = 2*i + 1
-    right_child = 2*i + 2
-    minimum = i
-    if left_child < n and data[left_child] < data[minimum]:
-        minimum = left_child
-    if right_child < n and data[right_child] < data[minimum]:
-        minimum = right_child
-    if i != minimum:
-        data[i], data[minimum] = data[minimum], data[i]
-        swaps.append((i, minimum))
-        heapify(data, minimum, swaps)
-
+#arturs janis Karss 1.grupa
+from pathlib import Path
 
 def build_heap(data):
-    n = len(data)
     swaps = []
-    for i in range(n // 2, -1, -1):
+    size = len(data)
+    for i in range(size // 2, -1, -1):
         heapify(data, i, swaps)
     return swaps
 
+def heapify(data, i, swaps):
+    size = len(data)
+    min_index = i
+    left_child = 2 * i + 1
+    right_child = 2 * i + 2
+    if left_child < size and data[left_child] < data[min_index]:
+        min_index = left_child
+    if right_child < size and data[right_child] < data[min_index]:
+        min_index = right_child
+    if min_index != i:
+        swaps.append((i, min_index))
+        data[i], data[min_index] = data[min_index], data[i]
+        heapify(data, min_index, swaps)
 
 def main():
-    try:
-        text = input()
-        if text not in ["I", "F"]:
-            print("Invalid input.")
-            return
-        if text == "I":
-            n = int(input())
-            data = list(map(int, input().split()))
-        elif text == "F":
-            filename = input()
-            if not filename.endswith(".txt"):
-                print("Wrong file name.")
-                return
-            with open("test/" + filename, "r") as f:
-                n = int(f.readline())
-                data = list(map(int, f.readline().split()))
-        else:
-            print("Invalid input.")
-            return
-    except:
-        print("Invalid input.")
+    input_type = input()
+    if "I" in input_type:
+        n = int(input())
+        data = list(map(int, input().split()))
+        assert len(data) == n
+    elif "F" in input_type:
+        file_name = input()
+        path = Path('./tests') / file_name
+        with path.open(mode="r") as f:
+            n = int(f.readline())
+            data = list(map(int, f.readline().split()))
+    else:
         return
-
     swaps = build_heap(data)
-
-    if len(swaps) > 4 * len(data):
-        print("Out of bounds.")
-        return
-
-    print(f"Number of swaps: {len(swaps)}")
+    print(len(swaps))
     for i, j in swaps:
-        print(f"{i} {j}")
-
+        print(i, j)
 
 if __name__ == "__main__":
     main()
