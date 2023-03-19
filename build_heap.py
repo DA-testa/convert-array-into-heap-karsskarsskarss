@@ -1,27 +1,30 @@
 # python3
 
 #test
+def heapify(data, n, i, swaps):
+    smallest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+
+    if left < n and data [left] < data [smallest]:
+        smallest = left
+
+    if left < n and data [right] < data [smallest]:
+        smallest = right  
+    
+    if smallest != i:
+        swaps.append((i, smallest)) 
+        data[i], data[smallest] = data[smallest], data[i]
+        heapify(data, n, smallest, swaps)
 def build_heap(data):
     
     swaps = []
     n = len(data)
-    for i in range (n // 2, -1, -1):
-        sift_down(i, data, swaps)
+    for i in range (n // 2, -1, -1, -1):
+        heapify(data, n, i, swaps)
     return swaps
 
-def sift_down(i, data, swaps):
-    n = len(data)
-    min_index = i
-    left = 2 * i + 1
-    if left < n and data[left] < data[min_index]:
-        min_index = left
-    right = 2 * i + 2
-    if right < n and data[right] < data[min_index]:
-        min_index = right
-    if i != min_index:
-        data[i], data[min_index] = data[min_index], data[i]
-        swaps.append((i, min_index))
-        sift_down(min_index, data, swaps)
+
 
 
 
